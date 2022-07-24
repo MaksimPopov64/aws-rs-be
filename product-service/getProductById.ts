@@ -1,10 +1,9 @@
-import { APIGatewayProxyHandler } from 'aws-lambda';
 import 'source-map-support/register';
-import * as data from './productList.json';
+import { getProductRow } from './pg-client';
 
-export const productById: APIGatewayProxyHandler = async (event, _context) => {
-  const { id } = event.pathParameters;
-  const item = data.find((item: any) => item.id === id );
+export const productById = async (event, _context) => {
+  console.log('createProduct', JSON.stringify(event.body));
+
   const response = {
     statusCode: 200,
     headers: {
@@ -13,12 +12,18 @@ export const productById: APIGatewayProxyHandler = async (event, _context) => {
     },
     body: '',
   };
+
+  const { id } = event.pathParameters;
+
   try {
-    response.body = JSON.stringify(item, null, 2);
-  } catch (error) {
+    const item = await getProductRow(id);
+    const product = item[0];
+    response.body = JSON.stringify(product, null, 2);
+    console.log(id, item[0]);
+  } catch (err) {
     response.statusCode = 500;
-    response.body = JSON.stringify(error, null, 2);
+    response.body = JSON.stringify(err, null, 2);
   }
 
   return response;
-}
+};

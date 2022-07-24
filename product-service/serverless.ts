@@ -24,8 +24,12 @@ const serverlessConfiguration: Serverless = {
       minimumCompressionSize: 1024,
     },
     environment: {
-      AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-    },
+      PG_HOST: 'lesson4-instance.cr99zrmm0khq.us-east-1.rds.amazonaws.com',
+      PG_PORT: '5432',
+      PG_DATABASE: 'lesson4',
+      PG_USERNAME: 'postgres',
+      PG_PASSWORD: 'dzZ2oxz7vDvtWxaD2tKz',
+    }
   },
   functions: {
     products: {
@@ -51,8 +55,19 @@ const serverlessConfiguration: Serverless = {
             }
         }
       ]
-    }
-  }
+    },
+    createProduct: {
+      handler: 'products.createProduct',
+      events: [
+        {
+          http: {
+            method: 'post',
+            path: 'products',
+            cors: true,
+          },
+  }]
+}
+}
 }
 
 module.exports = serverlessConfiguration;
