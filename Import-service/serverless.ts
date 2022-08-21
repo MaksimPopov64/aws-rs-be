@@ -50,6 +50,13 @@ const serverlessConfiguration: Serverless = {
             request: {
               parameters: { querystrings: { name: true } },
             },
+            authorizer: {
+              type: 'token',
+              name: 'tokenBasicAuthorizer',
+              arn: 'arn:aws:lambda:us-east-1:717164120316:function:authorization-service-dev-basic-authorizer:1',
+              resultTtlInSeconds: 0,
+              identitySource: 'method.request.header.Authorization'
+            },
             cors: {
               origins: '*',
               headers: ['Authorization']
